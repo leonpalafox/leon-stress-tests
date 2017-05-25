@@ -9,6 +9,9 @@ import pyspark.sql.functions as F
 def sorti(x):
 	a = np.sort(x)
 	return np.mean(a[:4])
+
+
+sc = SparkContext(appName = 'stress_spark')
 test_df = pd.DataFrame(np.random.rand(10000,10000))
 sqlCtx = SQLContext(sc)
 df = sqlCtx.createDataFrame(test_df) #Create the dataframe in spark
@@ -18,3 +21,4 @@ rowMean  = (reduce(add, (col(x) for x in df.columns[:4])) / 5).alias("mean")
 df.select(rowMean)
 elapsed = timeit.default_timer() - start_time
 print(elapsed)
+sc.stop()
